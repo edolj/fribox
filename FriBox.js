@@ -37,12 +37,18 @@ function posredujStaticnoVsebino(odgovor, absolutnaPotDoDatoteke, mimeType) {
                 fs.readFile(absolutnaPotDoDatoteke, function(napaka, datotekaVsebina) {
                     if (napaka) {
                         //Posreduj napako
+                        odgovor.writeHead(500, {'Content-Type':'text/plain'});
+                        odgovor.write("Napaka 500: Napaka na strezniku");
+                        odgovor.end();
                     } else {
                         posredujDatoteko(odgovor, absolutnaPotDoDatoteke, datotekaVsebina, mimeType);
                     }
                 })
             } else {
                 //Posreduj napako
+                odgovor.writeHead(404, {'Content-Type':'text/plain'});
+                odgovor.write("Napaka 404");
+                odgovor.end();
             }
         })
 }
@@ -95,3 +101,7 @@ function naloziDatoteko(zahteva, odgovor) {
         });
     });
 }
+
+streznik.listen(process.env.PORT,function() {
+   console.log("Streznik zagnan "+process.env.PORT); 
+});
